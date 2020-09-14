@@ -12,6 +12,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            background: #F8F8FF;
         }
         .content{
             width: 500px;
@@ -23,24 +24,47 @@
             border:1px dashed #000;
             background-image: url("/static/timg.jpeg");
         }
-        .content_text{
+        .content_top{
             text-align: center;
             margin: auto;
             border-bottom: 1px solid #000000;
         }
+        .content_status{
+            text-align: center;
+            margin-top: 60px;
+            display: None;
+        }
+        .content_status_sucess{
+            text-align: center;
+            display: None;
+        }
+        .content_status_fail{
+            text-align: center;
+            display: None;
+        }
+
     </style>
 </head>
 <body>
     <div class="content">
-        <div class="content_text">
+        <div class="content_top">
             <p>请输入数据接口IP：<input type="text" id="ip_input" name="ip_input">
                 <input type="submit" onclick="getip()" value="确定"
                        style="float: right; margin-right: 20px"></p>
         </div>
 
-        <div class="content_status">
-            <p>数据接口登录</p>
+        <div class="content_status" id="p_status">
+            <p >数据接口开始登录......</p>
         </div>
+
+        <div class="content_status_sucess" id="p_status_sucess">
+            <p >数据接口登录成功！</p>
+        </div>
+
+        <div class="content_status_fail" id="p_status_fail">
+            <p >数据接口登录失败！</p>
+        </div>
+
 
     </div>
 </body>
@@ -50,19 +74,20 @@
 <script>
     function getip() {
         var temp = document.getElementById("ip_input").value;
-
+        document.getElementById("p_status").style.display = 'block',
         $.ajax({
-            type:"GET",
+            type: "GET",
             url: "/data_request",
-            dataType:"json",
             data:{
-                ip:temp
+                ip: temp
             },
-            success: function(data){
-
-        }});
-
-
+            success:function (data) {
+                document.getElementById("p_status_sucess").style.display = 'block'
+            },
+            error: function () {
+                document.getElementById("p_status_fail").style.display = 'block'
+            }
+        })
     }
 </script>
 </html>

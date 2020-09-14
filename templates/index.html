@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+
     <title>manage_flask</title>
     <style>
         html, body {
@@ -19,11 +22,66 @@
             margin-top: -250px;
             border:1px dashed #000;
         }
+        .content_top{
+            text-align: center;
+            margin: auto;
+            border-bottom: 1px solid #000000;
+        }
+        .content_middle{
+            text-align: center;
+            margin: auto;
+        }
     </style>
 </head>
 <body>
-    <div class="content"></div>
+    <div class="content">
+        <div class="content_top">
+            <p>MASTER IP：<input type="text" id="master_ip" value=""></p>
+        </div>
 
+        <div class="content_middle">
+            <p>在master上执行的cmd</p>
+            <input type="text" value="" id="cmd_input">
+            <br>
+            <br>
+            <input type="submit" value="提交" onclick="get_cmd_result()">
+            <br>
+            <br>
+            <p>执行结果</p>
+            <textarea name="" id="cmd_result" cols="40" rows="10"></textarea>
+        </div>
 
+    </div>
 </body>
+<script>
+$.ajax({
+    type: "GET",
+    url: "/sendmip",
+    dataType: "json",
+    success:function (data) {
+        $("#master_ip").val(data);
+    },
+    error: function () {
+        alert('master ip获取失败')
+    }
+});
+
+
+function get_cmd_result(){
+    const cmd=document.getElementById("cmd_input").value;
+    const ip=document.getElementById("master_ip").value;
+    $.ajax({
+    type: "GET",
+    url: "http://"+ip+":12122/data/"+cmd+"/",
+    success:function (cmddata) {
+
+        const cmdresult=document.getElementById("cmd_result");
+        cmdresult.value=cmddata
+        }
+    })
+}
+
+
+</script>
+
 </html>
